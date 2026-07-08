@@ -24,11 +24,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22 # OIDC trusted publishing needs Node >= 22.14
+          # Node 24 bundles npm >= 11.5.1 with sigstore intact (OIDC provenance).
+          # Do NOT `npm install -g npm@latest` — that self-upgrade drops the
+          # bundled `sigstore` dep and breaks `npm publish` provenance.
+          node-version: 24
           registry-url: https://registry.npmjs.org
 
-      - name: Use npm >= 11.5.1 (required for OIDC)
-        run: npm install -g npm@latest
+      - name: Show tool versions
+        run: node -v && npm -v
 
       - name: Verify tag matches package.json
         run: |

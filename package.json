@@ -25,12 +25,19 @@
   },
   "keywords": [
     "meteor",
+    "meteorjs",
     "meteor-packages",
     "package-manager",
+    "cli",
     "atmosphere",
-    "vendor",
+    "atmosphere-alternative",
     "github-releases",
-    "cli"
+    "vendoring",
+    "vendor",
+    "private-packages",
+    "npm",
+    "nodejs",
+    "devtools"
   ],
   "license": "Apache-2.0",
   "publishConfig": {

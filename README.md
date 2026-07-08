@@ -15,7 +15,7 @@ package server. What you give up vs Atmosphere is `meteor update` semantics;
 Run with `npx` (no install):
 
 ```bash
-npx @zodo/zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0
+npx zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0
 ```
 
 That downloads the release tarball into `packages/ai-kit/` and, because
@@ -68,9 +68,9 @@ entry → credential helper → `--header`**.
 
 ```bash
 # private GitHub repo — token with contents:read
-ZMPM_GITHUB_TOKEN=ghp_xxx npx @zodo/zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0
+ZMPM_GITHUB_TOKEN=ghp_xxx npx zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0
 # any authenticated URL
-npx @zodo/zmpm add https://pkgs.example.com/zodo-seo-ssr-0.1.0.tgz --header "Authorization: Bearer $T"
+npx zmpm add https://pkgs.example.com/zodo-seo-ssr-0.1.0.tgz --header "Authorization: Bearer $T"
 ```
 
 Release assets on a private repo are fetched via the assets API (not the browser
@@ -107,7 +107,7 @@ a signed URL that carries its own auth. Runnable sample:
 [`examples/credential-helper.example.js`](examples/credential-helper.example.js).
 
 ```bash
-npx @zodo/zmpm add https://store.internal/secrets.tgz \
+npx zmpm add https://store.internal/secrets.tgz \
   --credential-helper "node ./scripts/sign-url.js"
 ```
 
@@ -165,40 +165,40 @@ the vendored packages, use `--no-gitignore`.
 
 ```bash
 # 1. Install a package (public repo) + its deps, then wire it into Meteor
-npx @zodo/zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0
+npx zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0
 meteor add zodo:ai-kit
 
 # 2. Private repo — token with contents:read
-ZMPM_GITHUB_TOKEN=ghp_xxx npx @zodo/zmpm add gh:zodo-dev/meteor-packages:ai-kit@latest
+ZMPM_GITHUB_TOKEN=ghp_xxx npx zmpm add gh:zodo-dev/meteor-packages:ai-kit@latest
 
 # 3. Pin a version and a custom target dir (persisted to zmpm.json)
-npx @zodo/zmpm add gh:zodo-dev/meteor-packages:seo-ssr@0.1.0 --dest app/packages
+npx zmpm add gh:zodo-dev/meteor-packages:seo-ssr@0.1.0 --dest app/packages
 
 # 4. Direct tarball URL with a static header
-npx @zodo/zmpm add https://pkgs.example.com/zodo-cookie-consent-0.1.0.tgz \
+npx zmpm add https://pkgs.example.com/zodo-cookie-consent-0.1.0.tgz \
   --header "Authorization: Bearer $REGISTRY_TOKEN"
 
 # 5. Object storage via a credential helper that returns a pre-signed URL
-npx @zodo/zmpm add https://store.internal/zodo-secrets.tgz \
+npx zmpm add https://store.internal/zodo-secrets.tgz \
   --credential-helper "node ./scripts/presign.js"
 
 # 6. Reproducible install in CI (reads zmpm.json, like npm ci)
-GITHUB_TOKEN=$CI_TOKEN npx @zodo/zmpm install
+GITHUB_TOKEN=$CI_TOKEN npx zmpm install
 
 # 7. Update all direct packages to their source spec (@latest re-resolves)
-npx @zodo/zmpm update
+npx zmpm update
 
 # 8. Update just one; inspect; remove one
-npx @zodo/zmpm update zodo:ai-kit
-npx @zodo/zmpm list
-npx @zodo/zmpm remove zodo:cookie-consent
+npx zmpm update zodo:ai-kit
+npx zmpm list
+npx zmpm remove zodo:cookie-consent
 
 # 9. Commit the vendored packages instead of gitignoring them
-npx @zodo/zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0 --no-gitignore
+npx zmpm add gh:zodo-dev/meteor-packages:ai-kit@0.2.0 --no-gitignore
 
 # 10. Build a release tarball locally (correct structure), then test it
-npx @zodo/zmpm pack ./ai-kit --out zodo-ai-kit-0.2.0.tgz
-npx @zodo/zmpm add file:./zodo-ai-kit-0.2.0.tgz   # install the local tarball to verify
+npx zmpm pack ./ai-kit --out zodo-ai-kit-0.2.0.tgz
+npx zmpm add file:./zodo-ai-kit-0.2.0.tgz   # install the local tarball to verify
 ```
 
 `zmpm pack` guarantees the layout the resolvers expect — a single top-level
@@ -211,7 +211,7 @@ A typical CI step for an app that vendors from a private repo:
 - name: Vendor Meteor packages
   env:
     GITHUB_TOKEN: ${{ secrets.PKG_READ_TOKEN }}
-  run: npx @zodo/zmpm install       # installs exactly what zmpm.json pins
+  run: npx zmpm install       # installs exactly what zmpm.json pins
 ```
 
 ## Notes

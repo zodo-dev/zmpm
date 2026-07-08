@@ -1,6 +1,6 @@
 {
   "name": "@zodo/zmpm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zodo Meteor Package Manager — vendor Meteor packages into an app's packages/ dir from GitHub Releases or any tarball URL, with auth and transitive-dependency resolution. A generic alternative to Atmosphere for private/self-hosted packages.",
   "type": "module",
   "bin": {

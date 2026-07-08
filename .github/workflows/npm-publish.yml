@@ -1,0 +1,41 @@
+name: Publish to npm
+
+# Publishes zmpm to npm when a `v<semver>` tag is pushed.
+#   npm version <patch|minor|major>   # bumps package.json + creates a v<semver> tag
+#   git push --follow-tags
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+
+      - name: Verify tag matches package.json
+        run: |
+          want="${GITHUB_REF_NAME#v}"
+          have=$(node -p "require('./package.json').version")
+          if [ "$have" != "$want" ]; then
+            echo "::error::package.json version ($have) != tag ($want)"
+            exit 1
+          fi
+
+      - name: Run tests
+        run: npm test --if-present
+
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_ZODO }}
+        run: npm publish --access public

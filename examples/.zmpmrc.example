@@ -1,0 +1,15 @@
+{
+  "//": "Copy to ~/.zmpmrc or <app>/.zmpmrc (and gitignore it — it holds secrets).",
+  "hosts": {
+    "api.github.com": {
+      "token": "ghp_your_read_token_here"
+    },
+    "pkgs.example.com": {
+      "headers": {
+        "Authorization": "Bearer STATIC_TOKEN",
+        "X-Registry": "internal"
+      }
+    }
+  },
+  "credentialHelper": "node ./examples/credential-helper.example.js"
+}

@@ -1,8 +1,11 @@
 name: Publish to npm
 
-# Publishes zmpm to npm when a `v<semver>` tag is pushed.
-#   npm version <patch|minor|major>   # bumps package.json + creates a v<semver> tag
-#   git push --follow-tags
+# Publishes @zodo/zmpm to npm on a `v<semver>` tag using npm Trusted Publishing
+# (OIDC) — no long-lived token, no 2FA bypass. Requires a Trusted Publisher to be
+# configured on npmjs.com for this package (repo: zodo-dev/zmpm, workflow:
+# npm-publish.yml). npm adds build provenance automatically.
+#
+# Release:  npm version <patch|minor|major> && git push --follow-tags
 
 on:
   push:
@@ -10,6 +13,7 @@ on:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
 permissions:
+  id-token: write # required for OIDC trusted publishing
   contents: read
 
 jobs:
@@ -20,8 +24,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22 # OIDC trusted publishing needs Node >= 22.14
           registry-url: https://registry.npmjs.org
+
+      - name: Use npm >= 11.5.1 (required for OIDC)
+        run: npm install -g npm@latest
 
       - name: Verify tag matches package.json
         run: |
@@ -38,7 +45,5 @@ jobs:
       - name: Run tests
         run: npm test --if-present
 
-      - name: Publish
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_ZODO }}
-        run: npm publish --access public
+      - name: Publish (OIDC — no token)
+        run: npm publish
